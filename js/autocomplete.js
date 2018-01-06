@@ -160,7 +160,15 @@
       if (this.oldVal !== val) {
         this._removeAutocomplete();
 
+        var self = this;
         if (val.length >= this.options.minLength) {
+          if (typeof this.options.data === 'function') {
+            this.options.data(val, function (err, data) {
+              self.isOpen = true;
+              self._renderDropdown(data, val);
+            })
+            return;
+          }
           this.isOpen = true;
           this._renderDropdown(this.options.data, val);
         }
